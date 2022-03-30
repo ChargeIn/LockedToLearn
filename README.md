@@ -27,3 +27,11 @@ Have fun learning :)
 
 >You can check out the full license [here](https://github.com/ChargeIn/LockedToLearn/blob/master/LICENSE)
 
+
+## Thanks to
+
+https://icons8.com for providing icons for the main app icon.
+
+https://www.flaticon.com/ for the icons of the main menu."
+
+https://wallpapercave.com/w/wp2855634 for the background image."

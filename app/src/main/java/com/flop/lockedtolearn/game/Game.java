@@ -127,7 +127,7 @@ public class Game {
     }
 
     public void saveAll() {
-        StringBuilder strAll = new StringBuilder("");
+        StringBuilder strAll = new StringBuilder();
 
         for (Map.Entry<String, String> e : all.entrySet()) {
             strAll.append(e.getKey()).append(Game.v_separator).append(e.getValue()).append("\n");
@@ -145,7 +145,7 @@ public class Game {
     }
 
     public void saveStats() {
-        StringBuilder stats = new StringBuilder("");
+        StringBuilder stats = new StringBuilder();
         stats.append(this.setsCleared).append("\n");
         stats.append(this.setsFirstTry).append("\n");
 
@@ -301,7 +301,7 @@ public class Game {
                 i++;
             } else {
                 btn.setOnClickListener((View view) -> {
-                    if(tries.get() == 0){
+                    if (tries.get() == 0) {
                         this.setsFirstTry++;
                     }
 
@@ -366,7 +366,7 @@ public class Game {
     }
 
     public String getStats() {
-        if(!isLoaded){
+        if (!isLoaded) {
             readVocabulary();
         }
 

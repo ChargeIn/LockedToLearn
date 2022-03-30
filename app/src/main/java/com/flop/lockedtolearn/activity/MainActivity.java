@@ -2,10 +2,8 @@ package com.flop.lockedtolearn.activity;
 
 import android.Manifest;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -16,7 +14,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,14 +24,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.flop.lockedtolearn.R;
 import com.flop.lockedtolearn.game.Game;
 import com.flop.lockedtolearn.service.LockscreenService;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -232,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onDelete(View view){
+    public void onDelete(View view) {
 
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -246,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         TextView dialogBtn_okay = dialog.findViewById(R.id.confirm);
         dialogBtn_okay.setOnClickListener(v -> {
             MainActivity.this.game.deleteAll();
-            Toast.makeText(getApplicationContext(),"Cleared all data." ,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Cleared all data.", Toast.LENGTH_SHORT).show();
             dialog.cancel();
         });
 

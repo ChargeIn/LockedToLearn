@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
@@ -37,8 +36,6 @@ public class LockscreenService extends Service {
     public int phoneState = TelephonyManager.CALL_STATE_IDLE;
     public boolean interrupted = false;
     private Game game;
-
-    public LockscreenService() {}
 
     @Override
     public void onCreate() {
@@ -79,7 +76,7 @@ public class LockscreenService extends Service {
         startMyOwnForeground();
     }
 
-    private void startMyOwnForeground(){
+    private void startMyOwnForeground() {
         NotificationChannel channel = new NotificationChannel(LockscreenService.NOTIFICATION_CHANNEL_ID, LockscreenService.CHANNEL_NAME, NotificationManager.IMPORTANCE_NONE);
         channel.setShowBadge(false);
         channel.enableLights(false);
@@ -150,7 +147,7 @@ public class LockscreenService extends Service {
 
         View lockView = this.game.createLockView();
 
-        if(lockView == null){
+        if (lockView == null) {
             this.unlockScreen();
             return;
         }
