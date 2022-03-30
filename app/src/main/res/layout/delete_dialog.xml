@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/question_card"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete all save data?"
+        android:paddingRight="40dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/text"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right"
+        >
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:padding="15dp"
+        android:textSize="16sp"
+        android:text="Cancel"
+        />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:text="Delete"
+        />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

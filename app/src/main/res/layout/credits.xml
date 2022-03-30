@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_blur"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/main_title"
+            android:textColor="#fafafa"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Thank you very much to:"
+            android:textAlignment="center"
+            android:textColor="#fafafa"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="https://icons8.com.\n for providing icons for the main app icon."
+            android:textAlignment="center"
+            android:textColor="#fafafa"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="https://www.flaticon.com/\n for the icons of the main menu."
+            android:textAlignment="center"
+            android:textColor="#fafafa"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="https://wallpapercave.com/w/wp2855634\n for the background image."
+            android:textAlignment="center"
+            android:textColor="#fafafa"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="For Sanni ❤️"
+            android:textAlignment="center"
+            android:textColor="#fafafa"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="by Florian Plesker"
+            android:textAlignment="center"
+            android:textColor="#fafafa"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/answer_button"
+            android:text="@string/back"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/text"
+            android:onClick="back"
+            />
+    </LinearLayout>
+
+</LinearLayout>
