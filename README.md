@@ -9,9 +9,9 @@ A simple learning app which tests you everytime you unlock your phone.
 
 ## Usage
 
-Install the app and download the provided template form the app.
+Install the app and download the provided template from the app.
 
-Add the words you want to learn to the excel sheet provided and save it in xls format.
+Add the words you want to learn to the excel sheet and save it in xls format.
 
 Upload the filled out template in the app and start the service.
 
