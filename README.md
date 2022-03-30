@@ -5,12 +5,7 @@
 
 A simple learning app which tests you everytime you unlock your phone.
 
-![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/stopped.png)
-![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/started.png)
-![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/anser_screen.png)
-![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/wrong.png)
-![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/unlocked.png)
-
+![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/preview.png)
 
 ## Usage
 
