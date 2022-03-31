@@ -23,6 +23,10 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
+            android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name=".activity.SoonActivity"
             android:screenOrientation="portrait"
             android:exported="false" />

@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                             });
                         } catch (IOException e) {
                             runOnUiThread(() -> {
-                                Log.i(".---------", e.getMessage());
                                 download.setText(R.string.download_btn);
                                 Toast.makeText(getApplicationContext(), "Download failed.", Toast.LENGTH_SHORT).show();
                             });
@@ -210,6 +208,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSoon(View view) {
         startActivity(new Intent(MainActivity.this, SoonActivity.class));
+    }
+
+    public void openSettings(View view) {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+
+        Bundle b = new Bundle();
+        b.putBoolean("isRunning", this.isServiceRunning());
+        intent.putExtras(b);
+        startActivity(intent);
     }
 
     public void openThx(View view) {

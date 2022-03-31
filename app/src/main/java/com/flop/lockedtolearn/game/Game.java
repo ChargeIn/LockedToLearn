@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +42,7 @@ public class Game {
 
     static String vocabularyPath = "vocabulary.txt";
     static String statsPath = "stats.txt";
+    static String settingsPath = "settings.txt";
     static String v_separator = "<v-sep>";
 
     HashMap<String, String> all = new HashMap<>();
@@ -50,6 +50,7 @@ public class Game {
     boolean isLoaded = false;
     boolean loading = false;
     boolean downloading = false;
+    boolean allowReverse = false;
 
     int setsCleared = 0;
     int setsFirstTry = 0;
@@ -76,6 +77,7 @@ public class Game {
 
     public void readVocabulary() {
         this.readStats();
+        this.readSettings();
 
         File path = context.getFilesDir();
         File vocabularyFile = new File(path, Game.vocabularyPath);
@@ -126,6 +128,26 @@ public class Game {
         }
     }
 
+    public void readSettings() {
+        File path = context.getFilesDir();
+        File statsFile = new File(path, Game.settingsPath);
+        if (!statsFile.exists()) {
+            return;
+        }
+
+        byte[] content = new byte[(int) statsFile.length()];
+        try {
+            FileInputStream fileInputStream = new FileInputStream(statsFile);
+            fileInputStream.read(content);
+            String strContent = new String(content);
+
+            String[] lines = strContent.split("\n");
+            allowReverse = Boolean.parseBoolean(lines[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void saveAll() {
         StringBuilder strAll = new StringBuilder();
 
@@ -154,6 +176,20 @@ public class Game {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(new File(path, Game.statsPath));
             fileOutputStream.write(stats.toString().getBytes());
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveSettings() {
+        String content = Boolean.toString(this.allowReverse);
+
+        File path = context.getFilesDir();
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(path, Game.settingsPath));
+            fileOutputStream.write(content.getBytes());
             fileOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,14 +249,12 @@ public class Game {
     }
 
     public void prepareSet() {
-        Log.i("---------------", "Preapare Set (is Loaded " + this.isLoaded);
         if (!this.isLoaded) {
             this.readVocabulary();
         }
 
         Set<String> learnSet = new HashSet<>();
 
-        Log.i("---------------", "key Set " + this.allKeys.length);
         if (this.allKeys.length == 0) {
             return;
         }
@@ -245,13 +279,10 @@ public class Game {
     }
 
     public View createLockView() {
-        Log.i("----------------", "Create View");
         if (this.learnSetKeys.length == 0) {
             return null;
         }
         this.solved = 0;
-
-        Log.i("----------------", "Was not empty");
 
         View view = this.inflater.inflate(R.layout.lock_screen, null);
 
@@ -265,8 +296,9 @@ public class Game {
     }
 
     private void fillLockView() {
+        boolean reverse = this.allowReverse && (Math.random() > 0.5);
         int correctAnswer = (int) (Math.random() * this.learnSetKeys.length);
-        this.questionTextView.setText(this.learnSetKeys[correctAnswer]);
+        this.questionTextView.setText(reverse ? this.all.get(this.learnSetKeys[correctAnswer]) : this.learnSetKeys[correctAnswer]);
 
         int[] wrongAnswers = new int[3];
 
@@ -297,7 +329,7 @@ public class Game {
                     btn.setTextColor(ContextCompat.getColor(this.context, R.color.failed_answer_btn_bg));
                     tries.getAndIncrement();
                 });
-                btn.setText(this.all.get(this.learnSetKeys[wrongAnswers[i]]));
+                btn.setText(reverse ? this.learnSetKeys[wrongAnswers[i]] : this.all.get(this.learnSetKeys[wrongAnswers[i]]));
                 i++;
             } else {
                 btn.setOnClickListener((View view) -> {
@@ -321,7 +353,7 @@ public class Game {
                     }
                     this.solved++;
                 });
-                btn.setText(this.all.get(this.learnSetKeys[correctAnswer]));
+                btn.setText(reverse ? this.learnSetKeys[correctAnswer] : this.all.get(this.learnSetKeys[correctAnswer]));
             }
             answerLayoutBox.addView(answer);
         }
@@ -382,5 +414,14 @@ public class Game {
         stats += "\n\nMore stats coming soon.";
 
         return stats;
+    }
+
+    public Boolean getAllowReverse() {
+        return this.allowReverse;
+    }
+
+    public void toggleAllowReverse() {
+        this.allowReverse = !this.allowReverse;
+        this.saveSettings();
     }
 }

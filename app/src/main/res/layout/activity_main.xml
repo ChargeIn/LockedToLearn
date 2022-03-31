@@ -180,7 +180,7 @@
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
-                android:onClick="openSoon"
+                android:onClick="openSettings"
                 android:orientation="vertical">
 
                 <ImageView
