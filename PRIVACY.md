@@ -8,6 +8,8 @@ The app does not forward any personal information to third parties. All data/sta
 
 The app requires the permission to check for phone calls to allow the phone to be unlocked without the lockscreen screen in case of a call.
 
+I do not take any LIABILITY or RESPONSIBILITY for the content uploaded by the user of the app. 
+
 If you find any security vulnerability or have any question, please send me an email and I will try to fix it/help you.
 
 Best regards,
@@ -22,6 +24,8 @@ Willkommen zur App Locked to Learn für Android.
 Bei der App Locked to Learn handelt es sich um eine Open-Source Android App, die von Florian Plesker entwickelt wurde. Der gesamte Source Code ist auf Github unter der GNU-Lizenz [erhältlich](https://github.com/ChargeIn/LockedToLearn/blob/master/LICENSE).
 
 Die App gibt keine personenbezogenen Daten an Dritte weiter. Alle gespeicherten und vom Nutzer eingegebenen Daten sind nur lokal gespeichert und können jederzeit vom Nutzer gelöscht werden oder gehen bei der Deinstallation automatisch verloren.
+
+Ich übernehme keine Verantwortung oder Haftung für die Inhalte, die vom Nutzer hochgeladen werden.
 
 Die App benötigt die Zugriffsrechte auf den Anruf-Status des Smartphones, um zu gewährleisten, dass sich das Handy im Falle eines Anrufs problemlos entsperren lässt.
 
