@@ -5,7 +5,7 @@
 
 A simple learning app which tests you everytime you unlock your phone.
 
-![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/preview.png)
+![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/main_grafic.png)
 
 ## Usage
 
@@ -16,6 +16,8 @@ Add the words you want to learn to the excel sheet and save it in xls format.
 Upload the filled out template in the app and start the service.
 
 Have fun learning :)
+
+![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/preview.png)
 
 ---
 ## License (GNU)

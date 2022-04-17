@@ -404,7 +404,8 @@ public class Game {
 
         this.readStats();
 
-        double firstTryPercentage = (double) this.setsFirstTry / this.setsCleared;
+        double firstTryPercentage =
+                this.setsFirstTry != 0 ? ((double) this.setsFirstTry / this.setsCleared) * 100 : 0;
         DecimalFormat df = new DecimalFormat("#.#");
 
         String stats = "";
