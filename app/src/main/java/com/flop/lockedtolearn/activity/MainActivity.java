@@ -14,13 +14,13 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView lockImage;
     TextView upload;
     TextView download;
-    LinearLayout startCard;
+    ConstraintLayout startCard;
     Game game;
 
     @Override

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,9 +42,9 @@
             android:columnCount="2"
             android:rowCount="3">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/start_card"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
@@ -51,7 +52,7 @@
                 android:background="@drawable/start_card_bg"
                 android:onClick="onToggleLock"
                 android:orientation="vertical"
-
+                app:layout_constraintDimensionRatio="1:1"
                 >
 
                 <ImageView
@@ -60,39 +61,50 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    />
+                    app:layout_constraintBottom_toTopOf="@+id/lock"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/lock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:lines="2"
                     android:maxLines="2"
                     android:padding="7dp"
-                    android:text="Start"
+                    android:text="Start Learning"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lock_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
                 android:onClick="onUploadFile"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1"
+                >
 
                 <ImageView
+                    android:id="@+id/upload_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/upload"/>
+                    android:src="@drawable/upload"
+                    app:layout_constraintBottom_toTopOf="@+id/upload"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/upload"
@@ -106,29 +118,38 @@
                     android:padding="7dp"
                     android:text="@string/upload_btn"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/upload_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
                 android:onClick="onDownloadTemplate"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1"
+                >
 
                 <ImageView
+                    android:id="@+id/download_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/download"/>
+                    android:src="@drawable/download"
+                    app:layout_constraintBottom_toTopOf="@+id/download_template"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/download_template"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -138,29 +159,37 @@
                     android:padding="7dp"
                     android:text="@string/download_btn"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/download_image" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
                 android:onClick="openHowTo"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1">
 
                 <ImageView
+                    android:id="@+id/help_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/help"/>
+                    android:src="@drawable/help"
+                    app:layout_constraintBottom_toTopOf="@+id/help"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/help"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -170,30 +199,37 @@
                     android:padding="7dp"
                     android:text="@string/help"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/help_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
                 android:onClick="openSettings"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1">
 
                 <ImageView
+                    android:id="@+id/settings_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:src="@drawable/setting"
-                    />
+                    app:layout_constraintBottom_toTopOf="@+id/settings"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/settings"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -203,29 +239,37 @@
                     android:padding="7dp"
                     android:text="@string/settings"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settings_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:onClick="openStats"
                 android:background="@drawable/question_card"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1">
 
                 <ImageView
+                    android:id="@+id/stats_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/stats" />
+                    android:src="@drawable/stats"
+                    app:layout_constraintBottom_toTopOf="@+id/info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/info"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -235,29 +279,37 @@
                     android:padding="7dp"
                     android:text="@string/info_btn"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/stats_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
                 android:onClick="openThx"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1">
 
                 <ImageView
+                    android:id="@+id/thx_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/heart"/>
+                    android:src="@drawable/heart"
+                    app:layout_constraintBottom_toTopOf="@+id/thx"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/thx"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -267,29 +319,37 @@
                     android:padding="7dp"
                     android:text="@string/Thanks_btn"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/thx_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
                 android:background="@drawable/question_card"
                 android:onClick="onDelete"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintDimensionRatio="1:1">
 
                 <ImageView
+                    android:id="@+id/delete_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/delete"/>
+                    android:src="@drawable/delete"
+                    app:layout_constraintBottom_toTopOf="@+id/trash"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/trash"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -299,8 +359,10 @@
                     android:padding="7dp"
                     android:text="@string/delete_btn"
                     android:textColor="@color/text"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delete_img" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </GridLayout>
     </ScrollView>
 
