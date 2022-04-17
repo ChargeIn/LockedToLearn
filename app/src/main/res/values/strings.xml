@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Locked To Learn</string>
-    <string name="version">v0.0.1</string>
+    <string name="version">v1.0.0</string>
     <string name="main_title">Locked to learn.</string>
     <string name="author">by Florian Plesker</string>
     <string name="upload_btn">Upload</string>
@@ -11,7 +11,7 @@
     <string name="loading">Loading…</string>
     <string name="downloading">Downloading…</string>
 
-    <string name="soon">Lazy developer at work...\n Coming soon.</string>
+    <string name="soon">Lazy developer at work…\n Coming soon.</string>
     <string name="how_to_1">1. Download the provided template.</string>
     <string name="how_to_2">2. Add your vocabulary starting from line 5 onwards.</string>
     <string name="how_to_3">3. Upload the filled out template to the app.</string>
