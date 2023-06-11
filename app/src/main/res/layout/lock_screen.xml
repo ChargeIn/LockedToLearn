@@ -58,6 +58,7 @@
                 android:layout_marginBottom="30dp"
                 android:gravity="top"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:id="@+id/answer_container"
                     android:layout_width="match_parent"

@@ -36,6 +36,9 @@ public class LockscreenService extends Service {
     public boolean interrupted = false;
     private Game game;
 
+    private TelephonyCallback phoneStateCallback = null;
+    private PhoneStateListener phoneStateListener = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,14 +47,25 @@ public class LockscreenService extends Service {
         filter.addAction("android.intent.action.SCREEN_ON");
         filter.addAction("android.intent.action.SCREEN_OFF");
         registerReceiver(receiver, filter);
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         this.game = new Game(this, vibrator);
-        this.game.setOnSolve(this::unlockScreen);
+        this.game.setOnSolve(() -> {
+            this.unregisterPhoneStateListener();
+            this.unlockScreen();
+        });
+
+        startMyOwnForeground();
+    }
+
+    private void registerPhoneStateListener() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
+            if (this.phoneStateCallback != null) {
+                return;
+            }
             class CallbackStateChange extends TelephonyCallback implements TelephonyCallback.CallStateListener {
 
                 @Override
@@ -60,19 +74,32 @@ public class LockscreenService extends Service {
                 }
             }
 
+            this.phoneStateCallback = new CallbackStateChange();
+
             telephonyManager.registerTelephonyCallback(
                     getApplicationContext().getMainExecutor(),
-                    new CallbackStateChange());
-        } else {
-            telephonyManager.listen(new PhoneStateListener() {
+                    this.phoneStateCallback);
+        } else if (this.phoneStateListener == null) {
+            this.phoneStateListener = new PhoneStateListener() {
                 @Override
                 public void onCallStateChanged(int state, String incomingNumber) {
                     callStateChanged(state, incomingNumber);
                     super.onCallStateChanged(state, incomingNumber);
                 }
-            }, PhoneStateListener.LISTEN_CALL_STATE);
+            };
+            telephonyManager.listen(this.phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
-        startMyOwnForeground();
+    }
+
+    private void unregisterPhoneStateListener() {
+        if (this.phoneStateCallback != null) {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && telephonyManager != null) {
+                telephonyManager.unregisterTelephonyCallback(this.phoneStateCallback);
+                this.phoneStateCallback = null;
+                this.phoneState = TelephonyManager.CALL_STATE_IDLE;
+            }
+        }
     }
 
     private void startMyOwnForeground() {
@@ -119,9 +146,10 @@ public class LockscreenService extends Service {
     }
 
     public void lockScreen() {
-        if (isLocked() || this.phoneState != TelephonyManager.CALL_STATE_IDLE) {
+        if (this.isLocked() || this.phoneState != TelephonyManager.CALL_STATE_IDLE) {
             return;
         }
+        this.registerPhoneStateListener();
 
         WindowManager windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 

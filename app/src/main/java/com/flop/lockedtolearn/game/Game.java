@@ -2,6 +2,7 @@ package com.flop.lockedtolearn.game;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -285,6 +287,21 @@ public class Game {
         this.solved = 0;
 
         View view = this.inflater.inflate(R.layout.lock_screen, null);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View view) {
+                    int height = view.getRootWindowInsets().getDisplayCutout().getSafeInsetTop();
+                    view.findViewById(R.id.title).setLayoutParams(new RelativeLayout.LayoutParams(-1, height));
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View view) {
+                    // ignore
+                }
+            });
+        }
 
         this.unlock_animation = view.findViewById(R.id.lottie_unlocked);
         this.questionTextView = view.findViewById(R.id.question_text);
