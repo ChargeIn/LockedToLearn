@@ -1,6 +1,7 @@
 package com.flop.lockedtolearn.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -41,93 +43,31 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout startCard;
     Game game;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    // random numbers used as identifier
+    public static final int READ_PHONE_STATE_PERMISSION_REQUEST_CODE = 1;
+    public static final int FILE_BROWSER_PERMISSION_REQUEST_CODE = 2;
 
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        game = new Game(getApplicationContext(), vibrator);
-
-        serviceRunning = isServiceRunning();
-
-        lockText = findViewById(R.id.lock);
-        lockText.setText(serviceRunning ? "Stop Learning" : "Start Learning");
-
-        startCard = findViewById(R.id.start_card);
-        startCard.setBackground(ContextCompat.getDrawable(getApplicationContext(), (serviceRunning ? R.drawable.stop_card_bg : R.drawable.start_card_bg)));
-
-        lockImage = findViewById(R.id.lock_img);
-        lockImage.setBackground(ContextCompat.getDrawable(getApplicationContext(), (serviceRunning ? R.drawable.stop : R.drawable.start)));
-
-        upload = findViewById(R.id.upload);
-        download = findViewById(R.id.download_template);
-    }
-
-    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 2323;
-
-    private void requestOverlayPermission() {
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, uri);
-        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
-    }
-
-    private void requestFileBrowserPermissions() {
-        this.requestPermissions(
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1001 // any number
-        );
-    }
-
-    private boolean checkOverLayPermission() {
-        return Settings.canDrawOverlays(this);
-    }
-
-    private boolean checkFileBrowserPermission() {
-        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE);
-        return permission == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (LockscreenService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void onToggleLock(View view) {
-        Intent intent = new Intent(MainActivity.this, LockscreenService.class);
-        if (serviceRunning) {
-            stopService(intent);
-            serviceRunning = !serviceRunning;
-        } else {
-            if (!checkOverLayPermission()) {
-                requestOverlayPermission();
-            } else {
-                startService(intent);
-                serviceRunning = !serviceRunning;
-            }
-        }
-        lockText.setText(serviceRunning ? "Stop Learning" : "Start Learning");
-        startCard.setBackground(ContextCompat.getDrawable(getApplicationContext(), (serviceRunning ? R.drawable.stop_card_bg : R.drawable.start_card_bg)));
-        lockImage.setBackground(ContextCompat.getDrawable(getApplicationContext(), (serviceRunning ? R.drawable.stop : R.drawable.start)));
-    }
+    // overlay permission callback
+    ActivityResultLauncher<Intent> permissionResultHandler = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // new permissions retry starting service
+                    this.toggleService();
+                }
+            });
 
     ActivityResultLauncher<Intent> uploadARLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getData() != null) {
                     Uri uri = result.getData().getData();
-                    upload.setText(R.string.loading);
+                    this.upload.setText(R.string.loading);
                     new Thread(() -> {
                         try {
                             String message = game.addFile(uri);
                             runOnUiThread(() -> {
-                                upload.setText(R.string.upload_btn);
+                                this.upload.setText(R.string.upload_btn);
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                                 // restart service to load new game context
@@ -140,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         } catch (IOException e) {
                             runOnUiThread(() -> {
-                                upload.setText(R.string.upload_btn);
+                                this.upload.setText(R.string.upload_btn);
                                 Toast.makeText(getApplicationContext(), "Upload failed.", Toast.LENGTH_SHORT).show();
                             });
                         }
@@ -149,8 +89,150 @@ public class MainActivity extends AppCompatActivity {
             }
     );
 
+    ActivityResultLauncher<Intent> downloadARLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getData() != null) {
+                    Uri uri = result.getData().getData();
+                    this.download.setText(R.string.downloading);
+                    new Thread(() -> {
+                        try {
+                            String message = game.writeTemplate(uri);
+                            runOnUiThread(() -> {
+                                this.download.setText(R.string.download_btn);
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            });
+                        } catch (IOException e) {
+                            runOnUiThread(() -> {
+                                this.download.setText(R.string.download_btn);
+                                Toast.makeText(getApplicationContext(), "Download failed.", Toast.LENGTH_SHORT).show();
+                            });
+                        }
+                    }).start();
+                }
+            }
+    );
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        this.game = new Game(getApplicationContext(), vibrator);
+
+        this.serviceRunning = isServiceRunning();
+
+        this.lockText = findViewById(R.id.lock);
+        this.lockText.setText(serviceRunning ? "Stop Learning" : "Start Learning");
+
+        this.startCard = findViewById(R.id.start_card);
+        this.startCard.setBackground(ContextCompat.getDrawable(getApplicationContext(), (serviceRunning ? R.drawable.stop_card_bg : R.drawable.start_card_bg)));
+
+        this.lockImage = findViewById(R.id.lock_img);
+        this.lockImage.setBackground(ContextCompat.getDrawable(getApplicationContext(), (serviceRunning ? R.drawable.stop : R.drawable.start)));
+
+        this.upload = findViewById(R.id.upload);
+        this.download = findViewById(R.id.download_template);
+    }
+
+    private void requestOverlayPermission() {
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, uri);
+        this.permissionResultHandler.launch(intent);
+    }
+
+    private void requestPhonePermission() {
+        ActivityCompat.requestPermissions(
+                MainActivity.this,
+                new String[]{Manifest.permission.READ_PHONE_STATE},
+                READ_PHONE_STATE_PERMISSION_REQUEST_CODE
+        );
+    }
+
+    private void requestFileBrowserPermissions() {
+        this.requestPermissions(
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                FILE_BROWSER_PERMISSION_REQUEST_CODE
+        );
+    }
+
+    private boolean checkOverlayPermission() {
+        return Settings.canDrawOverlays(this);
+    }
+
+    private boolean checkPhonePermission() {
+        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_PHONE_STATE);
+        return permission == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean checkFileBrowserPermission() {
+        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        return permission == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case READ_PHONE_STATE_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    this.toggleService();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Phone state permission was not granted. Please check your settings.", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+            case FILE_BROWSER_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    this.toggleService();
+                } else {
+                    Toast.makeText(getApplicationContext(), "File system permissions were not granted. Please check your settings.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    private boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        // The original getRunningServices is deprecated but for backwards compatibility it will return the own services
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (LockscreenService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void onToggleLock(View view) {
+        this.toggleService();
+    }
+
+    private void toggleService() {
+        Intent intent = new Intent(MainActivity.this, LockscreenService.class);
+        if (this.serviceRunning) {
+            stopService(intent);
+            this.serviceRunning = !this.serviceRunning;
+        } else {
+            if (!checkOverlayPermission()) {
+                requestOverlayPermission();
+            } else if (!checkPhonePermission()) {
+                requestPhonePermission();
+            } else {
+                startService(intent);
+                this.serviceRunning = !this.serviceRunning;
+            }
+        }
+        this.lockText.setText(this.serviceRunning ? "Stop Learning" : "Start Learning");
+        this.startCard.setBackground(ContextCompat.getDrawable(getApplicationContext(), (this.serviceRunning ? R.drawable.stop_card_bg : R.drawable.start_card_bg)));
+        this.lockImage.setBackground(ContextCompat.getDrawable(getApplicationContext(), (this.serviceRunning ? R.drawable.stop : R.drawable.start)));
+    }
+
     public void onUploadFile(View view) {
-        if (game.isLoading()) {
+        if (this.game.isLoading()) {
             return;
         }
 
@@ -160,35 +242,11 @@ public class MainActivity extends AppCompatActivity {
         Intent file = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         file.setType("*/*");
         file = Intent.createChooser(file, "Choose a file");
-        uploadARLauncher.launch(file);
+        this.uploadARLauncher.launch(file);
     }
 
-    ActivityResultLauncher<Intent> downloadARLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getData() != null) {
-                    Uri uri = result.getData().getData();
-                    download.setText(R.string.downloading);
-                    new Thread(() -> {
-                        try {
-                            String message = game.writeTemplate(uri);
-                            runOnUiThread(() -> {
-                                download.setText(R.string.download_btn);
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            });
-                        } catch (IOException e) {
-                            runOnUiThread(() -> {
-                                download.setText(R.string.download_btn);
-                                Toast.makeText(getApplicationContext(), "Download failed.", Toast.LENGTH_SHORT).show();
-                            });
-                        }
-                    }).start();
-                }
-            }
-    );
-
     public void onDownloadTemplate(View view) {
-        if (game.isDownloading()) {
+        if (this.game.isDownloading()) {
             return;
         }
 
@@ -199,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         file.setType("*/*.xls");
         file.putExtra(Intent.EXTRA_TITLE, "template.xls");
         file = Intent.createChooser(file, "Select a file path (.xls).");
-        downloadARLauncher.launch(file);
+        this.downloadARLauncher.launch(file);
     }
 
     public void openHowTo(View view) {
