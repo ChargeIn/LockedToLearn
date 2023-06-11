@@ -16,7 +16,6 @@ import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyCallback;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -116,13 +115,11 @@ public class LockscreenService extends Service {
     }
 
     public boolean isLocked() {
-        // TODO
         return this.view != null;
     }
 
     public void lockScreen() {
-        if (isLocked()) {
-            // TODO: update here
+        if (isLocked() || this.phoneState != TelephonyManager.CALL_STATE_IDLE) {
             return;
         }
 
@@ -152,9 +149,6 @@ public class LockscreenService extends Service {
             return;
         }
 
-        Log.i("Service", "Test this text");
-        System.out.println("Adding view");
-        // TODO add view here
         windowManager.addView(lockView, layoutParams);
         this.view = lockView;
     }
@@ -171,15 +165,15 @@ public class LockscreenService extends Service {
     }
 
     public void callStateChanged(int state, String incomingNumber) {
-        phoneState = state;
+        this.phoneState = state;
         if (state == TelephonyManager.CALL_STATE_IDLE) {
-            if (interrupted) {
+            if (this.interrupted) {
                 lockScreen();
-                interrupted = false;
+                this.interrupted = false;
             }
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
             if (isLocked()) {
-                interrupted = true;
+                this.interrupted = true;
                 unlockScreen();
             }
         }
