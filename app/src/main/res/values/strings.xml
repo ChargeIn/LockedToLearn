@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Locked To Learn</string>
-    <string name="version">v1.0.0</string>
+    <string name="version">v1.0.1</string>
     <string name="main_title">Locked to learn.</string>
     <string name="author">by Florian Plesker</string>
     <string name="upload_btn">Upload</string>

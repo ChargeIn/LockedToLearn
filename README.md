@@ -1,7 +1,6 @@
 # LockedToLearn
 
-
-[![Current Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/ChargeIn/LockedToLearn)
+[![Current Version](https://img.shields.io/badge/version-1.0.1-green.svg)](https://github.com/ChargeIn/LockedToLearn)
 
 A simple learning app which tests you everytime you unlock your phone.
 
@@ -22,10 +21,11 @@ Have fun learning :)
 ![Terminal Preview](https://github.com/ChargeIn/LockedToLearn/blob/master/pictures/preview.png)
 
 ---
+
 ## License (GNU)
 
->You can check out the full license [here](https://github.com/ChargeIn/LockedToLearn/blob/master/LICENSE)
-
+> You can check out the full
+> license [here](https://github.com/ChargeIn/LockedToLearn/blob/master/LICENSE)
 
 ## Thanks to
 
