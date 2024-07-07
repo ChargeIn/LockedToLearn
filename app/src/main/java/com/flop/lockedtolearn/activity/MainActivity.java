@@ -2,7 +2,6 @@ package com.flop.lockedtolearn.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,8 +29,6 @@ import com.flop.lockedtolearn.R;
 import com.flop.lockedtolearn.game.Game;
 import com.flop.lockedtolearn.service.LockscreenService;
 
-import java.io.IOException;
-
 public class MainActivity extends AppCompatActivity {
 
     boolean serviceRunning = false;
@@ -45,73 +42,50 @@ public class MainActivity extends AppCompatActivity {
 
     // random numbers used as identifier
     public static final int READ_PHONE_STATE_PERMISSION_REQUEST_CODE = 1;
-    public static final int FILE_BROWSER_PERMISSION_REQUEST_CODE = 2;
 
     // overlay permission callback
-    ActivityResultLauncher<Intent> permissionResultHandler = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    // new permissions retry starting service
-                    this.toggleService();
-                }
-            });
+    ActivityResultLauncher<Intent> permissionResultHandler = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            // new permissions retry starting service
+            this.toggleService();
+        }
+    });
 
-    ActivityResultLauncher<Intent> uploadARLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getData() != null) {
-                    Uri uri = result.getData().getData();
-                    this.upload.setText(R.string.loading);
-                    new Thread(() -> {
-                        try {
-                            String message = game.addFile(uri);
-                            runOnUiThread(() -> {
-                                this.upload.setText(R.string.upload_btn);
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    ActivityResultLauncher<Intent> uploadARLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getData() != null) {
+            Uri uri = result.getData().getData();
+            this.upload.setText(R.string.loading);
+            new Thread(() -> {
+                String message = game.addFile(uri);
+                runOnUiThread(() -> {
+                    this.upload.setText(R.string.upload_btn);
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                                // restart service to load new game context
-                                Intent intent = new Intent(MainActivity.this, LockscreenService.class);
+                    // restart service to load new game context
+                    Intent intent = new Intent(MainActivity.this, LockscreenService.class);
 
-                                if (this.isServiceRunning()) {
-                                    stopService(intent);
-                                    startService(intent);
-                                }
-                            });
-                        } catch (IOException e) {
-                            runOnUiThread(() -> {
-                                this.upload.setText(R.string.upload_btn);
-                                Toast.makeText(getApplicationContext(), "Upload failed.", Toast.LENGTH_SHORT).show();
-                            });
-                        }
-                    }).start();
-                }
-            }
-    );
+                    if (this.isServiceRunning()) {
+                        stopService(intent);
+                        startService(intent);
+                    }
+                });
+            }).start();
+        }
+    });
 
-    ActivityResultLauncher<Intent> downloadARLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getData() != null) {
-                    Uri uri = result.getData().getData();
-                    this.download.setText(R.string.downloading);
-                    new Thread(() -> {
-                        try {
-                            String message = game.writeTemplate(uri);
-                            runOnUiThread(() -> {
-                                this.download.setText(R.string.download_btn);
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            });
-                        } catch (IOException e) {
-                            runOnUiThread(() -> {
-                                this.download.setText(R.string.download_btn);
-                                Toast.makeText(getApplicationContext(), "Download failed.", Toast.LENGTH_SHORT).show();
-                            });
-                        }
-                    }).start();
-                }
-            }
-    );
+    ActivityResultLauncher<Intent> downloadARLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getData() != null) {
+            Uri uri = result.getData().getData();
+            this.download.setText(R.string.downloading);
+            new Thread(() -> {
+                String message = game.writeTemplate(uri);
+                runOnUiThread(() -> {
+                    this.download.setText(R.string.download_btn);
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                });
+            }).start();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,34 +117,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestPhonePermission() {
-        ActivityCompat.requestPermissions(
-                MainActivity.this,
-                new String[]{Manifest.permission.READ_PHONE_STATE},
-                READ_PHONE_STATE_PERMISSION_REQUEST_CODE
-        );
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE_PERMISSION_REQUEST_CODE);
     }
 
-    private void requestFileBrowserPermissions() {
-        this.requestPermissions(
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                FILE_BROWSER_PERMISSION_REQUEST_CODE
-        );
+
+    private boolean missingOverlayPermission() {
+        return !Settings.canDrawOverlays(this);
     }
 
-    private boolean checkOverlayPermission() {
-        return Settings.canDrawOverlays(this);
-    }
-
-    private boolean checkPhonePermission() {
-        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.READ_PHONE_STATE);
-        return permission == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean checkFileBrowserPermission() {
-        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE);
-        return permission == PackageManager.PERMISSION_GRANTED;
+    private boolean missingPhonePermission() {
+        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
+        return permission != PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -186,25 +143,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return;
             }
-            case FILE_BROWSER_PERMISSION_REQUEST_CODE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.toggleService();
-                } else {
-                    Toast.makeText(getApplicationContext(), "File system permissions were not granted. Please check your settings.", Toast.LENGTH_LONG).show();
-                }
-            }
         }
     }
 
     private boolean isServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        // The original getRunningServices is deprecated but for backwards compatibility it will return the own services
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (LockscreenService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+        return LockscreenService.isRunning;
     }
 
     public void onToggleLock(View view) {
@@ -217,14 +160,20 @@ public class MainActivity extends AppCompatActivity {
             stopService(intent);
             this.serviceRunning = !this.serviceRunning;
         } else {
-            if (!checkOverlayPermission()) {
+            if (missingOverlayPermission()) {
                 requestOverlayPermission();
-            } else if (!checkPhonePermission()) {
-                requestPhonePermission();
-            } else {
-                startService(intent);
-                this.serviceRunning = !this.serviceRunning;
             }
+
+            if (missingPhonePermission()) {
+                requestPhonePermission();
+            }
+
+            if (missingPhonePermission() || missingOverlayPermission()) {
+                return;
+            }
+
+            startService(intent);
+            this.serviceRunning = !this.serviceRunning;
         }
         this.lockText.setText(this.serviceRunning ? "Stop Learning" : "Start Learning");
         this.startCard.setBackground(ContextCompat.getDrawable(getApplicationContext(), (this.serviceRunning ? R.drawable.stop_card_bg : R.drawable.start_card_bg)));
@@ -236,9 +185,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (!checkFileBrowserPermission()) {
-            this.requestFileBrowserPermissions();
-        }
         Intent file = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         file.setType("*/*");
         file = Intent.createChooser(file, "Choose a file");
@@ -250,9 +196,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (!checkFileBrowserPermission()) {
-            this.requestFileBrowserPermissions();
-        }
         Intent file = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         file.setType("*/*.xls");
         file.putExtra(Intent.EXTRA_TITLE, "template.xls");
@@ -296,7 +239,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.delete_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        Window window = dialog.getWindow();
+
+        if (window != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
 
         TextView dialogBtn_cancel = dialog.findViewById(R.id.cancel);
         dialogBtn_cancel.setOnClickListener(v -> dialog.dismiss());

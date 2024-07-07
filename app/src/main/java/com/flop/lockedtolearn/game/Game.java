@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.view.DisplayCutout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,21 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.flop.lockedtolearn.R;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
@@ -89,8 +90,8 @@ public class Game {
         }
 
         byte[] content = new byte[(int) vocabularyFile.length()];
-        try {
-            FileInputStream fileInputStream = new FileInputStream(vocabularyFile);
+
+        try (FileInputStream fileInputStream = new FileInputStream(vocabularyFile)) {
             fileInputStream.read(content);
             String strContent = new String(content);
 
@@ -115,8 +116,8 @@ public class Game {
         }
 
         byte[] content = new byte[(int) statsFile.length()];
-        try {
-            FileInputStream fileInputStream = new FileInputStream(statsFile);
+
+        try (FileInputStream fileInputStream = new FileInputStream(statsFile)) {
             fileInputStream.read(content);
             String strContent = new String(content);
 
@@ -138,8 +139,7 @@ public class Game {
         }
 
         byte[] content = new byte[(int) statsFile.length()];
-        try {
-            FileInputStream fileInputStream = new FileInputStream(statsFile);
+        try (FileInputStream fileInputStream = new FileInputStream(statsFile)) {
             fileInputStream.read(content);
             String strContent = new String(content);
 
@@ -198,55 +198,61 @@ public class Game {
         }
     }
 
-    public String addFile(Uri fileUri) throws IOException {
+    public String addFile(Uri fileUri) {
         loading = true;
         if (!isLoaded) {
             this.readVocabulary();
         }
 
-        // The temp file could be whatever you want
-        InputStream inputStream = context.getContentResolver().openInputStream(fileUri);
+        try {
+            // The temp file could be whatever you want
+            InputStream inputStream = context.getContentResolver().openInputStream(fileUri);
 
-        if (inputStream == null) {
-            return "Failed to read input file.";
+            if (inputStream == null) {
+                loading = false;
+                return "Failed to read input file.";
+            }
+
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            int i = 0;
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+
+                // first 2 lines are headers info
+                if (i++ < 2) {
+                    continue;
+                }
+                String key, value, annotation;
+
+                Cell keyCell = row.getCell(0);
+                if (keyCell == null) {
+                    continue;
+                }
+                key = keyCell.toString();
+
+                //annotation = row.getCell(1).toString();
+
+                Cell valueCell = row.getCell(2);
+                if (valueCell == null) {
+                    continue;
+                }
+                value = valueCell.toString();
+
+                // TODO: add annotation support
+                this.all.put(key, value);
+            }
+
+            this.allKeys = this.all.keySet().toArray(new String[0]);
+
+            this.saveAll();
+            loading = false;
+        } catch (Exception e) {
+            loading = false;
+            return "Failed to parse input file.";
         }
-
-        HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
-        HSSFSheet sheet = workbook.getSheetAt(0);
-        Iterator<Row> rowIterator = sheet.iterator();
-
-        int i = 0;
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-
-            // first 2 lines are headers info
-            if (i++ < 2) {
-                continue;
-            }
-            String key, value, annotation;
-
-            Cell keyCell = row.getCell(0);
-            if (keyCell == null) {
-                continue;
-            }
-            key = keyCell.toString();
-
-            //annotation = row.getCell(1).toString();
-
-            Cell valueCell = row.getCell(2);
-            if (valueCell == null) {
-                continue;
-            }
-            value = valueCell.toString();
-
-            // TODO: add annotation support
-            this.all.put(key, value);
-        }
-
-        this.allKeys = this.all.keySet().toArray(new String[0]);
-
-        this.saveAll();
-        loading = false;
         return "Upload complete.";
     }
 
@@ -281,7 +287,7 @@ public class Game {
     }
 
     public View createLockView() {
-        if (this.learnSetKeys.length == 0) {
+        if (this.learnSetKeys.length < 4) {
             return null;
         }
         this.solved = 0;
@@ -291,13 +297,17 @@ public class Game {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
-                public void onViewAttachedToWindow(View view) {
-                    int height = view.getRootWindowInsets().getDisplayCutout().getSafeInsetTop();
-                    view.findViewById(R.id.title).setLayoutParams(new RelativeLayout.LayoutParams(-1, height));
+                public void onViewAttachedToWindow(@NonNull View view) {
+                    DisplayCutout cutout = view.getRootWindowInsets().getDisplayCutout();
+
+                    if (cutout != null) {
+                        int height = view.getRootWindowInsets().getDisplayCutout().getSafeInsetTop();
+                        view.findViewById(R.id.title).setLayoutParams(new RelativeLayout.LayoutParams(-1, height));
+                    }
                 }
 
                 @Override
-                public void onViewDetachedFromWindow(View view) {
+                public void onViewDetachedFromWindow(@NonNull View view) {
                     // ignore
                 }
             });
@@ -378,31 +388,39 @@ public class Game {
         this.answerContainer.addView(answerLayoutBox);
     }
 
-    public String writeTemplate(Uri uri) throws IOException {
+    public String writeTemplate(Uri uri) {
         downloading = true;
 
-        OutputStream fileOut = this.context.getContentResolver().openOutputStream(uri);
+        try {
+            OutputStream fileOut = this.context.getContentResolver().openOutputStream(uri);
 
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Vocabulary");
+            if (fileOut != null) {
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Vocabulary");
 
-        HSSFRow first = sheet.createRow(0);
-        first.createCell(0).setCellValue("<Title>");
+                Row first = sheet.createRow(0);
+                first.createCell(0).setCellValue("<Title>");
 
-        sheet.createRow(1);
+                sheet.createRow(1);
 
-        HSSFRow header = sheet.createRow(2);
-        header.createCell(0).setCellValue("<Native Language>");
-        header.createCell(1).setCellValue("<Annotations>");
-        header.createCell(2).setCellValue("<Translation>");
+                Row header = sheet.createRow(2);
+                header.createCell(0).setCellValue("<Native Language>");
+                header.createCell(1).setCellValue("<Annotations>");
+                header.createCell(2).setCellValue("<Translation>");
 
-        sheet.createRow(3);
-        sheet.createRow(4).createCell(0).setCellValue("<Start Here>");
+                sheet.createRow(3);
+                sheet.createRow(4).createCell(0).setCellValue("<Start Here>");
 
-        workbook.write(fileOut);
-        fileOut.close();
+                workbook.write(fileOut);
+                fileOut.close();
+            }
 
-        downloading = false;
+            downloading = false;
+        } catch (Exception e) {
+            downloading = false;
+            return "Download failed.";
+        }
+
 
         return "Download successful";
     }

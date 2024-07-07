@@ -30,6 +30,8 @@ public class LockscreenService extends Service {
     static final String NOTIFICATION_CHANNEL_ID = "com.flop.lockedtolearn";
     static final String CHANNEL_NAME = "Locked to Learn";
 
+    public static boolean isRunning = false;
+
     public ScreenReceiver receiver = null;
 
     public int phoneState = TelephonyManager.CALL_STATE_IDLE;
@@ -42,6 +44,9 @@ public class LockscreenService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        LockscreenService.isRunning = true;
+
         receiver = new ScreenReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.SCREEN_ON");
@@ -136,6 +141,9 @@ public class LockscreenService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        LockscreenService.isRunning = false;
+
         if (receiver != null) {
             unregisterReceiver(receiver);
         }
