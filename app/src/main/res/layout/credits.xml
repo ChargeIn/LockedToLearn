@@ -35,74 +35,68 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Thank you very much to:"
+            android:text="@string/thx"
             android:textAlignment="center"
             android:textColor="#fafafa"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="25dp"
-            />
+            android:layout_marginTop="25dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="https://icons8.com.\n for providing icons for the main app icon."
+            android:text="@string/icons8_link"
             android:textAlignment="center"
             android:textColor="#fafafa"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="25dp"
-            />
+            android:layout_marginTop="25dp" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="https://www.flaticon.com/\n for the icons of the main menu."
+            android:text="@string/flaticon_link"
             android:textAlignment="center"
             android:textColor="#fafafa"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="25dp"
-            />
+            android:layout_marginTop="25dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="https://wallpapercave.com/w/wp2855634\n for the background image."
+            android:text="@string/wallpaper_link"
             android:textAlignment="center"
             android:textColor="#fafafa"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            />
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="For Sanni ❤️"
+            android:text="@string/for_sanni"
             android:textAlignment="center"
             android:textColor="#fafafa"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            />
+            android:layout_marginTop="40dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="by Florian Plesker"
+            android:text="@string/by_author"
             android:textAlignment="center"
             android:textColor="#fafafa"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            />
+            android:layout_marginTop="40dp" />
 
     </LinearLayout>
 
@@ -110,6 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -118,8 +113,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/text"
-            android:onClick="back"
-            />
+            android:onClick="back" />
     </LinearLayout>
 
 </LinearLayout>

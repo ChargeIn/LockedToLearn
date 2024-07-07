@@ -79,6 +79,10 @@ public class Game {
     }
 
     public void readVocabulary() {
+        if (this.isLoaded) {
+            return;
+        }
+
         this.readStats();
         this.readSettings();
 
@@ -99,7 +103,18 @@ public class Game {
 
             for (String s : lines) {
                 String[] line = s.split(Game.v_separator);
-                this.all.put(line[0], line[1]);
+
+                if (line.length == 2) {
+                    this.all.put(line[0], line[1]);
+
+                    String key = line[0];
+                    String value = line[1];
+
+                    if (key.isBlank() || value.isBlank()) {
+                        continue;
+                    }
+                    this.all.put(key, value);
+                }
             }
             this.allKeys = this.all.keySet().toArray(new String[0]);
             this.isLoaded = true;
@@ -153,7 +168,7 @@ public class Game {
     public void saveAll() {
         StringBuilder strAll = new StringBuilder();
 
-        for (Map.Entry<String, String> e : all.entrySet()) {
+        for (Map.Entry<String, String> e : this.all.entrySet()) {
             strAll.append(e.getKey()).append(Game.v_separator).append(e.getValue()).append("\n");
         }
 
@@ -256,9 +271,27 @@ public class Game {
         return "Upload complete.";
     }
 
+    public void addPair(String nativeWord, String translation) {
+        if (!this.isLoaded) {
+            this.readVocabulary();
+        }
+
+        if (!this.isLoaded) {
+            return;
+        }
+
+        this.all.put(nativeWord, translation);
+        this.allKeys = this.all.keySet().toArray(new String[0]);
+        this.saveAll();
+    }
+
     public void prepareSet() {
         if (!this.isLoaded) {
             this.readVocabulary();
+        }
+
+        if (!this.isLoaded) {
+            return;
         }
 
         Set<String> learnSet = new HashSet<>();
@@ -433,11 +466,9 @@ public class Game {
     }
 
     public String getStats() {
-        if (!isLoaded) {
-            readVocabulary();
-        }
-
-        this.readStats();
+        // force refresh here (game might be changed from add word view)
+        this.isLoaded = false;
+        readVocabulary();
 
         double firstTryPercentage =
                 this.setsFirstTry != 0 ? ((double) this.setsFirstTry / this.setsCleared) * 100 : 0;

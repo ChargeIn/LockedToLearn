@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Locked To Learn</string>
-    <string name="version">v1.0.1</string>
+    <string name="version">v1.1.0</string>
     <string name="main_title">Locked to learn.</string>
     <string name="author">by Florian Plesker</string>
+    <string name="add">Add Words</string>
     <string name="upload_btn">Upload</string>
     <string name="download_btn">Download\nTemplate</string>
     <string name="Thanks_btn">Thanks</string>
@@ -10,6 +11,11 @@
     <string name="info_btn">Stats</string>
     <string name="loading">Loading…</string>
     <string name="downloading">Downloading…</string>
+
+    <string name="add_word">Save</string>
+    <string name="add_word_title">Add new word combination</string>
+    <string name="word">Native Word</string>
+    <string name="translation">Translation</string>
 
     <string name="soon">Lazy developer at work…\n Coming soon.</string>
     <string name="how_to_1">1. Download the provided template.</string>
@@ -19,4 +25,10 @@
     <string name="back">Back</string>
     <string name="help">Help</string>
     <string name="settings">Settings</string>
+    <string name="for_sanni">For Sanni ❤️</string>
+    <string name="by_author">by Florian Plesker</string>
+    <string name="wallpaper_link">https://wallpapercave.com/w/wp2855634\n for the background image.</string>
+    <string name="flaticon_link">https://www.flaticon.com/\n for the icons of the main menu.</string>
+    <string name="icons8_link">https://icons8.com.\n for providing icons for the main app icon.</string>
+    <string name="thx">Thank you very much to:</string>
 </resources>

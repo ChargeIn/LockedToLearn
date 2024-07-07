@@ -40,7 +40,7 @@
             android:background="@drawable/question_card"
             android:textSize="18sp"
             android:padding="15dp"
-            android:layout_marginBottom="25dp"/>
+            android:layout_marginBottom="25dp" />
 
     </LinearLayout>
 
@@ -48,16 +48,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/answer_button"
-        android:text="@string/back"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="@color/text"
-        android:onClick="back"
-        />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/answer_button"
+            android:text="@string/back"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/text"
+            android:onClick="back" />
     </LinearLayout>
 
 </LinearLayout>

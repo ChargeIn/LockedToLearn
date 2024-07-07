@@ -180,6 +180,10 @@ public class MainActivity extends AppCompatActivity {
         this.lockImage.setBackground(ContextCompat.getDrawable(getApplicationContext(), (this.serviceRunning ? R.drawable.stop : R.drawable.start)));
     }
 
+    public void onAddWord(View view) {
+        startActivity(new Intent(MainActivity.this, AddWordsActivity.class));
+    }
+
     public void onUploadFile(View view) {
         if (this.game.isLoading()) {
             return;

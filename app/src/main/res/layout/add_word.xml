@@ -24,52 +24,50 @@
 
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/answer_button"
+        android:onClick="back"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/back"
+        android:textColor="@color/text" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
+        android:layout_margin="20dp"
+        android:background="@drawable/question_card"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text"
-            android:background="@drawable/question_card"
-            android:text="@string/how_to_1"
+            android:layout_gravity="center_horizontal"
+            android:padding="2sp"
+            android:text="@string/add_word_title"
+            android:textColor="#fafafa"
             android:textSize="18sp"
-            android:padding="15dp"
-            android:layout_marginBottom="25dp" />
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp" />
 
-        <TextView
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/word_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/question_card"
-            android:textColor="@color/text"
-            android:text="@string/how_to_2"
-            android:textSize="18sp"
-            android:padding="15dp"
-            android:layout_marginBottom="25dp" />
+            android:layout_margin="6dp"
+            android:hint="@string/word" />
 
-        <TextView
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/translation_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/question_card"
-            android:textColor="@color/text"
-            android:text="@string/how_to_3"
-            android:textSize="18sp"
-            android:padding="15dp"
-            android:layout_marginBottom="25dp" />
+            android:layout_margin="6dp"
+            android:hint="@string/translation" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/question_card"
-            android:textColor="@color/text"
-            android:text="@string/how_to_4"
-            android:textSize="18sp"
-            android:padding="15dp"
-            android:layout_marginBottom="25dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -81,11 +79,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/answer_button"
-            android:text="@string/back"
+            android:onClick="onAdd"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:textColor="@color/text"
-            android:onClick="back" />
+            android:text="@string/add_word"
+            android:textColor="@color/text" />
     </LinearLayout>
 
 </LinearLayout>
