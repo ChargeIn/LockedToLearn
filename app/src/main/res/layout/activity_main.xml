@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_blur"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
     <LinearLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="54dp"
         android:background="@color/dark"
         android:orientation="vertical">
 
@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="20dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:text="@string/main_title"
             android:textColor="#fafafa"
             android:textSize="24sp"
@@ -30,15 +31,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="80dp">
+        android:layout_marginTop="54dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/background_blur">
 
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:columnCount="2"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:columnCount="2"
             android:rowCount="5">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -286,8 +288,8 @@
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="12dp"
-                android:onClick="openStats"
                 android:background="@drawable/question_card"
+                android:onClick="openStats"
                 android:orientation="vertical"
                 app:layout_constraintDimensionRatio="1:1">
 
@@ -407,12 +409,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/dark"
         android:fontFamily="serif"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:text="@string/version"
         android:textColor="#fafafa"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
 </RelativeLayout>
