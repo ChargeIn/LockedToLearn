@@ -90,6 +90,7 @@ public class Game {
         File vocabularyFile = new File(path, Game.vocabularyPath);
 
         if (!vocabularyFile.exists()) {
+            this.isLoaded = true;
             return;
         }
 

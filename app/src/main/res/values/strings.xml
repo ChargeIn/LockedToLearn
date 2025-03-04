@@ -31,4 +31,6 @@
     <string name="flaticon_link">https://www.flaticon.com/\n for the icons of the main menu.</string>
     <string name="icons8_link">https://icons8.com.\n for providing icons for the main app icon.</string>
     <string name="thx">Thank you very much to:</string>
+    <string name="reverse_mode">Reverse Mode</string>
+    <string name="reverse_mode_tooltip">If reverse mode is enabled, the vocabulary will be also learned in reversed direction.</string>
 </resources>

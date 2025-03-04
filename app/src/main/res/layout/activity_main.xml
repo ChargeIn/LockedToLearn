@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:background="@color/toolbar"
     tools:context=".activity.MainActivity">
 
     <LinearLayout
@@ -32,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="0dp"
         android:background="@drawable/background_blur">
 
         <GridLayout
@@ -409,7 +410,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/dark"
         android:fontFamily="serif"
         android:gravity="center"
         android:paddingTop="6dp"

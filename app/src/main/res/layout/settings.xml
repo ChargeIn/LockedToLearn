@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_blur"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/toolbar"
+    tools:context=".activity.SettingsActivity">
 
     <LinearLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:background="@color/dark"
         android:orientation="vertical">
 
@@ -26,47 +29,53 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="20dp"
-        android:background="@drawable/question_card"
-        android:orientation="vertical">
+        android:layout_marginTop="54dp"
+        android:background="@drawable/background_blur">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/reverse_mode"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:text="Reverse Mode"
-            android:textColor="@color/text"
-            android:onClick="toggleReverse"
-            android:showText="true"
-            android:textOn="on" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text"
-            android:text="If reverse mode is enabled, the vocabulary will be also learned in reversed direction." />
+            android:gravity="center"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/question_card"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/reverse_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="toggleReverse"
+                    android:showText="true"
+                    android:text="@string/reverse_mode"
+                    android:textColor="@color/text"
+                    android:textOn="on" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/answer_button"
-            android:text="@string/back"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/text"
-            android:onClick="back" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reverse_mode_tooltip"
+                    android:textColor="@color/text" />
 
-</LinearLayout>
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/answer_button"
+                android:onClick="back"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/back"
+                android:textColor="@color/text" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
