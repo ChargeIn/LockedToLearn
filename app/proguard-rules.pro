@@ -22,6 +22,13 @@
 
 # Please add these rules to your existing keep rules in order to suppress warnings.
 # This is generated automatically by the Android Gradle plugin.
+-dontwarn aQute.bnd.annotation.baseline.BaselineIgnore
+-dontwarn aQute.bnd.annotation.spi.ServiceConsumer
+-dontwarn aQute.bnd.annotation.spi.ServiceProvider
+-dontwarn edu.umd.cs.findbugs.annotations.Nullable
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+-dontwarn net.sf.saxon.om.NamespaceUri
+-dontwarn org.osgi.framework.wiring.BundleRevision
 -dontwarn java.awt.Color
 -dontwarn java.awt.color.ColorSpace
 -dontwarn java.awt.geom.AffineTransform
